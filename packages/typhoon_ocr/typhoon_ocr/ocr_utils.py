@@ -82,6 +82,15 @@ def get_pdf_media_box_width_height(local_pdf_path: str, page_num: int) -> tuple[
     :param page_num: The page number for which to extract MediaBox dimensions
     :return: A dictionary containing MediaBox dimensions or None if not found
     """
+    from .pdf_utils import pdf_utils_available
+    if not pdf_utils_available:
+        raise ImportError(
+            "PDF utilities are not available. "
+            "Installation instructions for Poppler utilities:\n"
+            "- macOS: Run 'brew install poppler'\n"
+            "- Ubuntu/Debian: Run 'apt-get install poppler-utils'\n"
+            "- Windows: Install from https://github.com/oschwartz10612/poppler-windows/releases/ and add to PATH"
+        )
         
     # Construct the pdfinfo command to extract info for the specific page
     command = ["pdfinfo", "-f", str(page_num), "-l", str(page_num), "-box", "-enc", "UTF-8", local_pdf_path]
@@ -104,6 +113,15 @@ def get_pdf_media_box_width_height(local_pdf_path: str, page_num: int) -> tuple[
     raise ValueError("MediaBox not found in the PDF info.")
     
 def render_pdf_to_base64png(local_pdf_path: str, page_num: int, target_longest_image_dim: int = 2048) -> str:
+    from .pdf_utils import pdf_utils_available
+    if not pdf_utils_available:
+        raise ImportError(
+            "PDF utilities are not available. "
+            "Installation instructions for Poppler utilities:\n"
+            "- macOS: Run 'brew install poppler'\n"
+            "- Ubuntu/Debian: Run 'apt-get install poppler-utils'\n"
+            "- Windows: Install from https://github.com/oschwartz10612/poppler-windows/releases/ and add to PATH"
+        )
         
     longest_dim = max(get_pdf_media_box_width_height(local_pdf_path, page_num))
 
@@ -394,6 +412,29 @@ PROMPTS_SYS = {
         f"Your final output must be in JSON format with a single key `natural_text` containing the response.\n"
         f"RAW_TEXT_START\n{base_text}\nRAW_TEXT_END"
     ),
+    "v1.5": lambda base_text=None: """Extract all text from the image.
+
+
+Instructions:
+- Only return the clean Markdown.
+- Do not include any explanation or extra text.
+- You must include all information on the page.
+
+
+Formatting Rules:
+- Tables: Render tables using <table>...</table> in clean HTML format.
+- Equations: Render equations using LaTeX syntax with inline ($...$) and block ($$...$$).
+- Images/Charts/Diagrams: Wrap any clearly defined visual areas (e.g. charts, diagrams, pictures) in:
+
+
+<figure>
+Describe the image's main elements (people, objects, text), note any contextual clues (place, event, culture), mention visible text and its meaning, provide deeper analysis when relevant (especially for financial charts, graphs, or documents), comment on style or architecture if relevant, then give a concise overall summary. Describe in Thai.
+</figure>
+
+
+- Page Numbers: Wrap page numbers in <page_number>...</page_number> (e.g., <page_number>14</page_number>).
+- Checkboxes: Use ☐ for unchecked and ☑ for checked boxes.
+    """,
 }
 
 def get_prompt(prompt_name: str) -> Callable[[str], str]:
@@ -407,9 +448,10 @@ def get_prompt(prompt_name: str) -> Callable[[str], str]:
     Available prompt types:
     - "default": Creates a prompt for extracting text with tables in markdown format.
     - "structure": Creates a prompt for extracting text with tables in HTML format and image analysis.
+    - "v1.5": OCR v1.5 prompt that doesn't require anchor text, uses clean Markdown with HTML tables and Thai figure descriptions.
     
     Args:
-        prompt_name (str): The identifier for the desired prompt template ("default" or "structure").
+        prompt_name (str): The identifier for the desired prompt template ("default", "structure", or "v1.5").
         
     Returns:
         Callable[[str], str]: A function that takes extracted text and returns a formatted prompt.
@@ -436,7 +478,7 @@ def get_anchor_text_from_image(img: Image.Image):
 
 def prepare_ocr_messages(
     pdf_or_image_path: str, 
-    task_type: str = "default", 
+    task_type: str = "v1.5", 
     target_image_dim: int = 1800,
     target_text_length: int = 8000,
     page_num: int = 1,
@@ -451,16 +493,17 @@ def prepare_ocr_messages(
     Processing Steps:
     1. Convert image to PDF if necessary (images are always treated as single pages)
     2. Render the selected PDF page to base64 PNG
-    3. Extract anchor text from the page with position information
+    3. Extract anchor text from the page with position information (not needed for v1.5)
     4. Apply appropriate prompt template based on task type
     5. Create a messages structure ready for LLM API submission
     
     Args:
         pdf_or_image_path (str): Path to a PDF or image file to process
         task_type (str): Type of OCR task - "default" for standard markdown extraction,
-                         "structure" for enhanced layout analysis with HTML tables
+                         "structure" for enhanced layout analysis with HTML tables,
+                         "v1.5" for OCR v1.5 with clean Markdown and Thai figure descriptions
         target_image_dim (int): Target longest dimension for the rendered image in pixels
-        target_text_length (int): Maximum length of extracted text to include
+        target_text_length (int): Maximum length of extracted text to include (not used for v1.5)
         page_num (int): Page number to process (default=1, for images always 1)
         
     Returns:
@@ -497,8 +540,9 @@ def prepare_ocr_messages(
             img = Image.open(pdf_or_image_path)
             # Render the image to base64 PNG
             image_base64 = image_to_base64png(img)
-            # Get anchor text from the image
-            anchor_text = get_anchor_text_from_image(img)
+            # Get anchor text from the image (not needed for v1.5)
+            if task_type != "v1.5":
+                anchor_text = get_anchor_text_from_image(img)
         else:
             if page_num < 1:
                 page_num = 1
@@ -508,20 +552,25 @@ def prepare_ocr_messages(
             image_base64 = render_pdf_to_base64png(
                 filename, page_num, target_longest_image_dim=target_image_dim
             )
-            # Extract anchor text from the selected PDF page
-            anchor_text = get_anchor_text(
-                filename,
-                page_num,
-                pdf_engine="pdfreport",
-                target_length=target_text_length,
-            )
+            # Extract anchor text from the selected PDF page (not needed for v1.5)
+            if task_type != "v1.5":
+                anchor_text = get_anchor_text(
+                    filename,
+                    page_num,
+                    pdf_engine="pdfreport",
+                    target_length=target_text_length,
+                )
         
         
         # Get the prompt template function for the specified task type
         prompt_fn = get_prompt(task_type)
         
         # Apply the prompt template to the extracted anchor text
-        prompt_text = prompt_fn(anchor_text)
+        # For v1.5, no anchor text is needed
+        if task_type == "v1.5":
+            prompt_text = prompt_fn()
+        else:
+            prompt_text = prompt_fn(anchor_text)
         
         # Create messages structure
         messages = [
@@ -573,7 +622,7 @@ def ensure_image_in_path(input_string: str) -> str:
             return input_string
     return input_string
 
-def ocr_document(pdf_or_image_path: str, task_type: str = "default", target_image_dim: int = 1800, target_text_length: int = 8000, page_num: int = 1, base_url: str = os.getenv("TYPHOON_BASE_URL", 'https://api.opentyphoon.ai/v1'), api_key: str = None, model: str = "typhoon-ocr-preview") -> str:
+def ocr_document(pdf_or_image_path: str, task_type: str = "v1.5", target_image_dim: int = 1800, target_text_length: int = 8000, page_num: int = 1, base_url: str = os.getenv("TYPHOON_BASE_URL", 'https://api.opentyphoon.ai/v1'), api_key: str = None, model: str = "typhoon-ocr") -> str:
     """
     OCR a PDF or image file.
     
@@ -584,9 +633,10 @@ def ocr_document(pdf_or_image_path: str, task_type: str = "default", target_imag
     Args:
         pdf_or_image_path (str): Path to a PDF or image file to process
         task_type (str): Type of OCR task - "default" for standard markdown extraction,
-                         "structure" for enhanced layout analysis with HTML tables
+                         "structure" for enhanced layout analysis with HTML tables,
+                         "v1.5" for OCR v1.5 with clean Markdown and Thai figure descriptions
         target_image_dim (int): Target longest dimension for the rendered image in pixels
-        target_text_length (int): Maximum length of extracted text to include
+        target_text_length (int): Maximum length of extracted text to include (not used for v1.5)
         page_num (int): Page number to process (default=1, for images always 1)
         base_url (str): API base URL
         api_key (str): API key for authentication (will also check environment variables if None)
