@@ -412,7 +412,7 @@ PROMPTS_SYS = {
         f"Your final output must be in JSON format with a single key `natural_text` containing the response.\n"
         f"RAW_TEXT_START\n{base_text}\nRAW_TEXT_END"
     ),
-    "v1.5": lambda base_text=None: """Extract all text from the image.
+    "v1.5": lambda base_text=None, figure_language="Thai": f"""Extract all text from the image.
 
 
 Instructions:
@@ -428,7 +428,7 @@ Formatting Rules:
 
 
 <figure>
-Describe the image's main elements (people, objects, text), note any contextual clues (place, event, culture), mention visible text and its meaning, provide deeper analysis when relevant (especially for financial charts, graphs, or documents), comment on style or architecture if relevant, then give a concise overall summary. Describe in Thai.
+Describe the image's main elements (people, objects, text), note any contextual clues (place, event, culture), mention visible text and its meaning, provide deeper analysis when relevant (especially for financial charts, graphs, or documents), comment on style or architecture if relevant, then give a concise overall summary. Describe in {figure_language}.
 </figure>
 
 
@@ -464,6 +464,35 @@ def get_prompt(prompt_name: str) -> Callable[[str], str]:
     """
     return PROMPTS_SYS.get(prompt_name, lambda x: "Invalid PROMPT_NAME provided.")
 
+def resize_if_needed(img: Image.Image, max_size: int = 2048) -> Image.Image:
+    """
+    Resize image if width or height exceeds 300 pixels.
+    Used for OCR v1.5 processing.
+    
+    Args:
+        img: PIL Image to resize
+        max_size: Maximum size for the longest dimension
+        
+    Returns:
+        Resized image or original if no resize needed
+    """
+    width, height = img.size
+    # Only resize if one dimension exceeds 300
+    if width > 300 or height > 300:
+        if width >= height:
+            # scale width to max_size
+            scale = max_size / float(width)
+            new_size = (max_size, int(height * scale))
+        else:
+            # scale height to max_size
+            scale = max_size / float(height)
+            new_size = (int(width * scale), max_size)
+
+        img = img.resize(new_size, Image.Resampling.LANCZOS)
+        return img
+    else:
+        return img  # no resize
+
 def image_to_base64png(img: Image.Image):
     buffered = io.BytesIO()
     img = img.convert("RGB")
@@ -482,6 +511,7 @@ def prepare_ocr_messages(
     target_image_dim: int = 1800,
     target_text_length: int = 8000,
     page_num: int = 1,
+    figure_language: str = "Thai",
 ) -> List[Dict[str, Any]]:
     """
     Prepare messages for OCR processing from a PDF or image file.
@@ -505,6 +535,7 @@ def prepare_ocr_messages(
         target_image_dim (int): Target longest dimension for the rendered image in pixels
         target_text_length (int): Maximum length of extracted text to include (not used for v1.5)
         page_num (int): Page number to process (default=1, for images always 1)
+        figure_language (str): Language for figure descriptions in v1.5 (default: "Thai")
         
     Returns:
         List[Dict[str, Any]]: Messages structure ready for OCR processing with an LLM API,
@@ -538,6 +569,9 @@ def prepare_ocr_messages(
         if is_image:
             page_num = 1
             img = Image.open(pdf_or_image_path)
+            # For v1.5, use different resize logic
+            if task_type == "v1.5":
+                img = resize_if_needed(img, max_size=target_image_dim)
             # Render the image to base64 PNG
             image_base64 = image_to_base64png(img)
             # Get anchor text from the image (not needed for v1.5)
@@ -566,9 +600,10 @@ def prepare_ocr_messages(
         prompt_fn = get_prompt(task_type)
         
         # Apply the prompt template to the extracted anchor text
-        # For v1.5, no anchor text is needed
+        # For v1.5, no anchor text is needed but figure_language is passed
         if task_type == "v1.5":
-            prompt_text = prompt_fn()
+            assert figure_language in ["Thai", "English"], "figure_language must be 'Thai' or 'English' for v1.5"
+            prompt_text = prompt_fn(figure_language=figure_language)
         else:
             prompt_text = prompt_fn(anchor_text)
         
@@ -622,7 +657,7 @@ def ensure_image_in_path(input_string: str) -> str:
             return input_string
     return input_string
 
-def ocr_document(pdf_or_image_path: str, task_type: str = "v1.5", target_image_dim: int = 1800, target_text_length: int = 8000, page_num: int = 1, base_url: str = os.getenv("TYPHOON_BASE_URL", 'https://api.opentyphoon.ai/v1'), api_key: str = None, model: str = "typhoon-ocr") -> str:
+def ocr_document(pdf_or_image_path: str, task_type: str = "v1.5", target_image_dim: int = 1800, target_text_length: int = 8000, page_num: int = 1, base_url: str = os.getenv("TYPHOON_BASE_URL", 'https://api.opentyphoon.ai/v1'), api_key: str = None, model: str = "typhoon-ocr-preview", figure_language: str = "Thai") -> str:
     """
     OCR a PDF or image file.
     
@@ -641,6 +676,7 @@ def ocr_document(pdf_or_image_path: str, task_type: str = "v1.5", target_image_d
         base_url (str): API base URL
         api_key (str): API key for authentication (will also check environment variables if None)
         model (str): Model identifier to use for OCR
+        figure_language (str): Language instruction for figure descriptions in v1.5 (default: "Thai" | "English")
         
     Returns:
         str: Extracted text content in the specified format
@@ -656,18 +692,23 @@ def ocr_document(pdf_or_image_path: str, task_type: str = "v1.5", target_image_d
         task_type=task_type,
         target_image_dim=target_image_dim,
         target_text_length=target_text_length,
-        page_num=page_num if page_num else 1
+        page_num=page_num if page_num else 1,
+        figure_language=figure_language
     )
     response = openai.chat.completions.create(
         model=model,
         messages=messages,
         max_tokens=16384,
         extra_body={
-            "repetition_penalty": 1.2,
+            "repetition_penalty": 1.1 if task_type == "v1.5" else 1.2,
             "temperature": 0.1,
             "top_p": 0.6,
         },
     )
     text_output = response.choices[0].message.content
-    text = json.loads(text_output)['natural_text']
-    return text
+    # For v1.5, text is returned directly without JSON wrapping
+    if task_type == "v1.5":
+        return text_output
+    else:
+        text = json.loads(text_output)['natural_text']
+        return text
