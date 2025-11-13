@@ -657,7 +657,7 @@ def ensure_image_in_path(input_string: str) -> str:
             return input_string
     return input_string
 
-def ocr_document(pdf_or_image_path: str, task_type: str = "v1.5", target_image_dim: int = 1800, target_text_length: int = 8000, page_num: int = 1, base_url: str = os.getenv("TYPHOON_BASE_URL", 'https://api.opentyphoon.ai/v1'), api_key: str = None, model: str = "typhoon-ocr-preview", figure_language: str = "Thai") -> str:
+def ocr_document(pdf_or_image_path: str, task_type: str = "v1.5", target_image_dim: int = 1800, target_text_length: int = 8000, page_num: int = 1, base_url: str = os.getenv("TYPHOON_BASE_URL", 'https://api.opentyphoon.ai/v1'), api_key: str = None, model: str = "typhoon-ocr", figure_language: str = "Thai") -> str:
     """
     OCR a PDF or image file.
     
@@ -684,6 +684,8 @@ def ocr_document(pdf_or_image_path: str, task_type: str = "v1.5", target_image_d
     Raises:
         ValueError: If image conversion fails, page number is out of range, or other processing errors occur
     """
+    if 'typhoon-ocr-preview' in model:
+        assert task_type in ['default', 'structure'], "task_type must be 'default' or 'structure' for typhoon-ocr-preview models"
     pdf_or_image_path = ensure_image_in_path(pdf_or_image_path)
     
     openai = OpenAI(base_url=base_url, api_key=api_key or os.getenv("TYPHOON_OCR_API_KEY") or os.getenv('TYPHOON_API_KEY') or os.getenv("OPENAI_API_KEY"))
