@@ -29,6 +29,17 @@ pip install -r requirements.txt
 # pip install vllm # optional for hosting a local server
 ```
 
+### Windows notes
+
+- Install the dependencies into the same interpreter or virtual environment that you use to run `python app.py`.
+- If `pip install` hangs or cannot find packages, check that these environment variables are not blocking downloads in your current terminal:
+  - `PIP_NO_INDEX`
+  - `HTTP_PROXY`
+  - `HTTPS_PROXY`
+  - `ALL_PROXY`
+  - `GIT_HTTP_PROXY`
+  - `GIT_HTTPS_PROXY`
+
 ### Mac specific
 
 ```

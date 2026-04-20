@@ -14,8 +14,12 @@ Swagger UI:
 import base64
 import json
 import os
+import socket
+import sys
 import tempfile
 import traceback
+import urllib.error
+import urllib.request
 from io import BytesIO
 from typing import Optional
 import fitz  # PyMuPDF - pure Python PDF rendering (no poppler needed)
@@ -91,6 +95,29 @@ app.add_middleware(
 # Allowed file extensions
 # ---------------------------------------------------------------------------
 ALLOWED_EXTENSIONS = {".pdf", ".png", ".jpg", ".jpeg"}
+
+
+def _is_port_in_use(port: int, host: str = "127.0.0.1") -> bool:
+    """Return True when a TCP port is already accepting connections."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock.settimeout(1)
+        return sock.connect_ex((host, port)) == 0
+
+
+def _describe_existing_service(port: int) -> str:
+    """Best-effort description of the service already bound to the port."""
+    url = f"http://127.0.0.1:{port}/openapi.json"
+    try:
+        with urllib.request.urlopen(url, timeout=2) as response:
+            payload = json.load(response)
+        title = payload.get("info", {}).get("title")
+        if title == app.title:
+            return f"{title} is already running at http://localhost:{port}/docs"
+        if title:
+            return f"Another HTTP API is already running on port {port}: {title}"
+    except (urllib.error.URLError, TimeoutError, ValueError, json.JSONDecodeError):
+        pass
+    return f"Another process is already using port {port}"
 
 
 def _get_extension(filename: str) -> str:
@@ -1119,6 +1146,16 @@ if __name__ == "__main__":
     import uvicorn
 
     port = int(os.getenv("API_PORT", "8000"))
+    if _is_port_in_use(port):
+        print(f"[ERROR] Port {port} is already in use.")
+        print(f"[HINT] {_describe_existing_service(port)}")
+        print("[HINT] Stop the existing process, or run this API on another port.")
+        if os.name == "nt":
+            print(f"[HINT] PowerShell: $env:API_PORT=\"{port + 1}\"; python api_server.py")
+        else:
+            print(f"[HINT] Shell: API_PORT={port + 1} python api_server.py")
+        sys.exit(1)
+
     print(f"[*] Starting Typhoon OCR API Server on port {port}")
     print(f"[>] Backend: {'Remote API' if USE_REMOTE else 'LM Studio'}")
     print(f"[>] Base URL: {active_base_url}")
