@@ -1,0 +1,723 @@
+{
+    "mappings": [
+        {
+            "ocr_text": "กรงุเทพม หานคร",
+            "correct_text": "กรุงเทพมหานคร",
+            "type": "word_position_swap",
+            "rules_applied": [
+                "ร-กับ-ุสลับ",
+                "เติม-สระ-า",
+                "ลบ-วรรค"
+            ]
+        },
+        {
+            "ocr_text": "ตาํบล",
+            "correct_text": "ตำบล",
+            "type": "character_swap",
+            "rules_applied": [
+                "ํ-กับ-ำสลับ"
+            ]
+        },
+        {
+            "ocr_text": "อาํเภอ",
+            "correct_text": "อำเภอ",
+            "type": "character_swap",
+            "rules_applied": [
+                "ํ-กับ-ำสลับ"
+            ]
+        },
+        {
+            "ocr_text": "หมบู่้าน",
+            "correct_text": "หมู่บ้าน",
+            "type": "complex_error",
+            "rules_applied": [
+                "ม-กับ-ู่สลับ",
+                "-า-ผิดรูป"
+            ]
+        },
+        {
+            "ocr_text": "หมู่บา้น",
+            "correct_text": "หมู่บ้าน",
+            "type": "tone_mark_error",
+            "rules_applied": [
+                "ย้าย-ไม้โท-ไป-น"
+            ]
+        },
+        {
+            "ocr_text": "บา้น",
+            "correct_text": "บ้าน",
+            "type": "tone_mark_error",
+            "rules_applied": [
+                "ย้าย-ไม้โท-ไป-น"
+            ]
+        },
+        {
+            "ocr_text": "จรเข้บวั",
+            "correct_text": "จระเข้บัว",
+            "type": "character_swap",
+            "rules_applied": [
+                "ว-กับ-ัสลับ",
+                "ลบ-วรรณยุกต์"
+            ]
+        },
+        {
+            "ocr_text": "จรเขบ้วั",
+            "correct_text": "จระเข้บัว",
+            "type": "character_swap",
+            "rules_applied": [
+                "ว-กับ-ัสลับ",
+                "ลบ-วรรณยุกต์"
+            ]
+        },
+        {
+            "ocr_text": "ลาดปลาเคา้",
+            "correct_text": "ลาดปลาเค้า",
+            "type": "tone_mark_error",
+            "rules_applied": [
+                "ย้าย-ไม้โท-ไป-ว"
+            ]
+        },
+        {
+            "ocr_text": "มนีบรีุ",
+            "correct_text": "มนีบุรี",
+            "type": "vowel_swap",
+            "rules_applied": [
+                "ุ-กับ-ีสลับ"
+            ]
+        },
+        {
+            "ocr_text": "ชลบรีุ",
+            "correct_text": "ชลบุรี",
+            "type": "vowel_swap",
+            "rules_applied": [
+                "ุ-กับ-ีสลับ"
+            ]
+        },
+        {
+            "ocr_text": "เชงิเนนิ",
+            "correct_text": "เชิงเนิน",
+            "type": "complex_error",
+            "rules_applied": [
+                "สลับ-สระ-และ-ตัวสะกด"
+            ]
+        },
+        {
+            "ocr_text": "ชอืสนิคา้",
+            "correct_text": "ชื่อสินค้า",
+            "type": "vowel_swap",
+            "rules_applied": [
+                "ื-กับ-ิสลับ",
+                "ลบ-วรรณยุกต์ซ้อน"
+            ]
+        },
+        {
+            "ocr_text": "สนิคา้",
+            "correct_text": "สินค้า",
+            "type": "vowel_swap",
+            "rules_applied": [
+                "ิ-กับ-าสลับ"
+            ]
+        },
+        {
+            "ocr_text": "ตวัเลอืก สนคิ้า",
+            "correct_text": "ตัวเลือกสินค้า",
+            "type": "complex_error",
+            "rules_applied": [
+                "แก้-คำสะกด",
+                "แก้-สระ"
+            ]
+        },
+        {
+            "ocr_text": "ตวเลอกสนคา",
+            "correct_text": "ตัวเลือกสินค้า",
+            "type": "complex_error",
+            "rules_applied": [
+                "แก้-คำสะกด",
+                "เติม-สระ"
+            ]
+        },
+        {
+            "ocr_text": "สง่ฟรี",
+            "correct_text": "ส่งฟรี",
+            "type": "tone_mark_error",
+            "rules_applied": [
+                "ย้าย-ไม้โท-ไป-ส"
+            ]
+        },
+        {
+            "ocr_text": "ครีมกนั",
+            "correct_text": "ครีมกัน",
+            "type": "consonant_vowel_swap",
+            "rules_applied": [
+                "น-สะกด-กับ-ั-สลับ"
+            ]
+        },
+        {
+            "ocr_text": "กนแดด",
+            "correct_text": "กันแดด",
+            "type": "consonant_vowel_swap",
+            "rules_applied": [
+                "น-สะกด-กับ-ั-สลับ"
+            ]
+        },
+        {
+            "ocr_text": "กนัแดด",
+            "correct_text": "กันแดด",
+            "type": "consonant_vowel_swap",
+            "rules_applied": [
+                "น-สะกด-กับ-ั-สลับ"
+            ]
+        },
+        {
+            "ocr_text": "กนั",
+            "correct_text": "กัน",
+            "type": "consonant_vowel_swap",
+            "rules_applied": [
+                "น-สะกด-กับ-ั-สลับ"
+            ]
+        },
+        {
+            "ocr_text": "ผิ์ว",
+            "correct_text": "ผิว",
+            "type": "tone_removal",
+            "rules_applied": [
+                "ลบ-วรรณยุกต์ซ้อน"
+            ]
+        },
+        {
+            "ocr_text": "หนงั",
+            "correct_text": "หนัง",
+            "type": "vowel_tone_swap",
+            "rules_applied": [
+                "ั-กับ-ไม้โทสลับ"
+            ]
+        },
+        {
+            "ocr_text": "แพทยผิ์ว",
+            "correct_text": "แพทย์ผิว",
+            "type": "tone_removal",
+            "rules_applied": [
+                "ลบ-วรรณยุกต์ซ้อน"
+            ]
+        },
+        {
+            "ocr_text": "ครมี",
+            "correct_text": "ครีม",
+            "type": "vowel_consonant_swap",
+            "rules_applied": [
+                "ม-สะกด-กับ-ิสลับ"
+            ]
+        },
+        {
+            "ocr_text": "หวงั",
+            "correct_text": "หวัง",
+            "type": "vowel_tone_swap",
+            "rules_applied": [
+                "ั-กับ-ไม้โทสลับ"
+            ]
+        },
+        {
+            "ocr_text": "จังหวดักรงุเทพมหานคร",
+            "correct_text": "จังหวัดกรุงเทพมหานคร",
+            "type": "complex_error",
+            "rules_applied": [
+                "จัดการ-วรรณยุกต์-และ-ตัวสะกด"
+            ]
+        },
+        {
+            "ocr_text": "สตูร",
+            "correct_text": "สูตร",
+            "type": "contextual_guess",
+            "rules_applied": [
+                "เดา-จาก-บริบท"
+            ]
+        },
+        {
+            "ocr_text": "ฟนฟู",
+            "correct_text": "ฟื้นฟู",
+            "type": "consonant_to_vowel",
+            "rules_applied": [
+                "น-ไปเป็น-สระ-ืน"
+            ]
+        },
+        {
+            "ocr_text": "มออาชพัืี",
+            "correct_text": "มืออาชีพ",
+            "type": "complex_error",
+            "rules_applied": [
+                "แก้-คำแรก",
+                "ลบ-ตัวซ้ำ"
+            ]
+        },
+        {
+            "ocr_text": "จงัหวดั",
+            "correct_text": "จังหวัด",
+            "type": "complex_error",
+            "rules_applied": [
+                "ั-สลับ-ง",
+                "ั-สลับ-ด"
+            ]
+        },
+        {
+            "ocr_text": "จังหวดั",
+            "correct_text": "จังหวัด",
+            "type": "vowel_tone_swap",
+            "rules_applied": [
+                "ั-สลับ-ด"
+            ]
+        },
+        {
+            "ocr_text": "กรงุเทพ",
+            "correct_text": "กรุงเทพ",
+            "type": "character_swap",
+            "rules_applied": [
+                "ง-กับ-ุสลับ"
+            ]
+        },
+        {
+            "ocr_text": "ตําบล",
+            "correct_text": "ตำบล",
+            "type": "character_swap",
+            "rules_applied": [
+                "ํ-กับ-ำสลับ"
+            ]
+        },
+        {
+            "ocr_text": "อําเภอ",
+            "correct_text": "อำเภอ",
+            "type": "character_swap",
+            "rules_applied": [
+                "ํ-กับ-ำสลับ"
+            ]
+        },
+        {
+            "ocr_text": "เมอืง",
+            "correct_text": "เมือง",
+            "type": "vowel_swap",
+            "rules_applied": [
+                "อ-กับ-ืสลับ"
+            ]
+        },
+        {
+            "ocr_text": "ชื่อสนิคา้",
+            "correct_text": "ชื่อสินค้า",
+            "type": "vowel_swap",
+            "rules_applied": [
+                "ิ-กับ-าสลับ"
+            ]
+        },
+        {
+            "ocr_text": "ชอืสนิคา้่",
+            "correct_text": "ชื่อสินค้า",
+            "type": "complex_error",
+            "rules_applied": [
+                "ื-กับ-ิสลับ",
+                "ลบ-วรรณยุกต์ซ้อน"
+            ]
+        },
+        {
+            "ocr_text": "ตวัเลอืกสนิค้า",
+            "correct_text": "ตัวเลือกสินค้า",
+            "type": "complex_error",
+            "rules_applied": [
+                "แก้-คำสะกด",
+                "แก้-สระ"
+            ]
+        },
+        {
+            "ocr_text": "ตวเลอืกสินค้า",
+            "correct_text": "ตัวเลือกสินค้า",
+            "type": "complex_error",
+            "rules_applied": [
+                "แก้-คำสะกด",
+                "แก้-สระ"
+            ]
+        },
+        {
+            "ocr_text": "ครมีกันแดด",
+            "correct_text": "ครีมกันแดด",
+            "type": "vowel_consonant_swap",
+            "rules_applied": [
+                "ม-สะกด-กับ-ิสลับ"
+            ]
+        },
+        {
+            "ocr_text": "ครีมกนัแดด",
+            "correct_text": "ครีมกันแดด",
+            "type": "consonant_vowel_swap",
+            "rules_applied": [
+                "น-สะกด-กับ-ั-สลับ"
+            ]
+        },
+        {
+            "ocr_text": "ครมีกนแดด",
+            "correct_text": "ครีมกันแดด",
+            "type": "complex_error",
+            "rules_applied": [
+                "ม-สลับ-ิ",
+                "น-สลับ-ั"
+            ]
+        },
+        {
+            "ocr_text": "คมุมนั",
+            "correct_text": "คุมมัน",
+            "type": "vowel_swap",
+            "rules_applied": [
+                "ุ-สลับ-ม",
+                "ั-สลับ-น"
+            ]
+        },
+        {
+            "ocr_text": "คุมมันั",
+            "correct_text": "คุมมัน",
+            "type": "tone_removal",
+            "rules_applied": [
+                "ลบ-วรรณยุกต์ท้ายคำ"
+            ]
+        },
+        {
+            "ocr_text": "กันแดดคุมมันั",
+            "correct_text": "กันแดดคุมมัน",
+            "type": "tone_removal",
+            "rules_applied": [
+                "ลบ-วรรณยุกต์ท้ายคำ"
+            ]
+        },
+        {
+            "ocr_text": "กนแดดคมุมนั",
+            "correct_text": "กันแดดคุมมัน",
+            "type": "complex_error",
+            "rules_applied": [
+                "แก้-ทั้งสองคำ"
+            ]
+        },
+        {
+            "ocr_text": "ปกปอ้ง",
+            "correct_text": "ปกป้อง",
+            "type": "tone_mark_error",
+            "rules_applied": [
+                "ย้าย-ไม้โท"
+            ]
+        },
+        {
+            "ocr_text": "พรอมบำรงุ้",
+            "correct_text": "พร้อมบำรุง",
+            "type": "complex_error",
+            "rules_applied": [
+                "เติม-ไม้โท",
+                "ลบ-วรรณยุกต์ซ้อน"
+            ]
+        },
+        {
+            "ocr_text": "ลดเลือนรืิ้้วรอย",
+            "correct_text": "ลดเลือนริ้วรอย",
+            "type": "tone_removal",
+            "rules_applied": [
+                "ลบ-วรรณยุกต์ซ้อน"
+            ]
+        },
+        {
+            "ocr_text": "แพทยผ์วิ",
+            "correct_text": "แพทย์ผิว",
+            "type": "vowel_consonant_swap",
+            "rules_applied": [
+                "ว-กับ-ิสลับ"
+            ]
+        },
+        {
+            "ocr_text": "แพทยผิ์วหนงั",
+            "correct_text": "แพทย์ผิวหนัง",
+            "type": "complex_error",
+            "rules_applied": [
+                "ลบ-วรรณยุกต์ซ้อน",
+                "ั-สลับ-ง"
+            ]
+        },
+        {
+            "ocr_text": "เชงิเนนิ",
+            "correct_text": "เชิงเนิน",
+            "type": "complex_error",
+            "rules_applied": [
+                "สลับ-สระ-และ-ตัวสะกด"
+            ]
+        },
+        {
+            "ocr_text": "เข ต",
+            "correct_text": "เขต",
+            "type": "space_removal",
+            "rules_applied": [
+                "ลบ-ช่องว่าง"
+            ]
+        },
+        {
+            "ocr_text": "ศริผลกลุ",
+            "correct_text": "ศิริผลกุล",
+            "type": "complex_error",
+            "rules_applied": [
+                "สลับ-สระ"
+            ]
+        },
+        {
+            "ocr_text": "จงัหวดัชลบรีุ",
+            "correct_text": "จังหวัดชลบุรี",
+            "type": "complex_error",
+            "rules_applied": [
+                "ั-สลับ-ง",
+                "ุ-สลับ-ี"
+            ]
+        },
+        {
+            "ocr_text": "จงัหวดักรงุเทพมหานคร",
+            "correct_text": "จังหวัดกรุงเทพมหานคร",
+            "type": "complex_error",
+            "rules_applied": [
+                "ั-สลับ-ง",
+                "ุ-สลับ-ง"
+            ]
+        },
+        {
+            "ocr_text": "จงัหวดักรุงเทพมหานคร",
+            "correct_text": "จังหวัดกรุงเทพมหานคร",
+            "type": "complex_error",
+            "rules_applied": [
+                "ั-สลับ-ง"
+            ]
+        },
+        {
+            "ocr_text": "จงัหวัดระยอง",
+            "correct_text": "จังหวัดระยอง",
+            "type": "character_swap",
+            "rules_applied": [
+                "ั-สลับ-ง"
+            ]
+        },
+        {
+            "ocr_text": "ครมีกันแดดสตูรแพทย์ผิวหนงั",
+            "correct_text": "ครีมกันแดดสูตรแพทย์ผิวหนัง",
+            "type": "complex_error",
+            "rules_applied": [
+                "ม-สลับ-ิ",
+                "ต-สลับ-ู",
+                "ง-สลับ-ั"
+            ]
+        },
+        {
+            "ocr_text": "ครีมกนัแดดสตูรแพทยผ์วิหนัง",
+            "correct_text": "ครีมกันแดดสูตรแพทย์ผิวหนัง",
+            "type": "complex_error",
+            "rules_applied": [
+                "น-สลับ-ั",
+                "ต-สลับ-ู",
+                "ว-สลับ-ิ"
+            ]
+        },
+        {
+            "ocr_text": "ผ่ล้อม",
+            "correct_text": "ไผ่ล้อม",
+            "type": "missing_leading_vowel",
+            "rules_applied": [
+                "เติม-สระ-ไ"
+            ]
+        },
+        {
+            "ocr_text": "บางกระทมุ่",
+            "correct_text": "บางกระทุ่ม",
+            "type": "character_swap",
+            "rules_applied": [
+                "ม-กับ-ุ่สลับ"
+            ]
+        },
+        {
+            "ocr_text": "พษิณุโลก",
+            "correct_text": "พิษณุโลก",
+            "type": "vowel_swap",
+            "rules_applied": [
+                "ิ-กับ-ษสลับ"
+            ]
+        },
+        {
+            "ocr_text": "ตำบลผ่ล้อม",
+            "correct_text": "ตำบลไผ่ล้อม",
+            "type": "missing_leading_vowel",
+            "rules_applied": [
+                "เติม-สระ-ไ"
+            ]
+        },
+        {
+            "ocr_text": "ตำบลผล่อ้ม",
+            "correct_text": "ตำบลไผ่ล้อม",
+            "type": "complex_error",
+            "rules_applied": [
+                "เติม-สระ-ไ",
+                "ย้าย-ไม้โท"
+            ]
+        },
+        {
+            "ocr_text": "อำเภอบางกระทมุ่",
+            "correct_text": "อำเภอบางกระทุ่ม",
+            "type": "character_swap",
+            "rules_applied": [
+                "ม-กับ-ุ่สลับ"
+            ]
+        },
+        {
+            "ocr_text": "จังหวัดพษิณุโลก",
+            "correct_text": "จังหวัดพิษณุโลก",
+            "type": "vowel_swap",
+            "rules_applied": [
+                "ิ-กับ-ษสลับ"
+            ]
+        },
+        {
+            "ocr_text": "พทย์",
+            "correct_text": "แพทย์",
+            "type": "missing_leading_vowel",
+            "rules_applied": [
+                "เติม-สระ-แ"
+            ]
+        },
+        {
+            "ocr_text": "สตูรพทย์",
+            "correct_text": "สูตรแพทย์",
+            "type": "complex_error",
+            "rules_applied": [
+                "ต-กับ-ูสลับ",
+                "เติม-สระ-แ"
+            ]
+        },
+        {
+            "ocr_text": "ปกปอง",
+            "correct_text": "ปกป้อง",
+            "type": "tone_mark_error",
+            "rules_applied": [
+                "เติม-ไม้โท"
+            ]
+        },
+        {
+            "ocr_text": "พรอ้ม",
+            "correct_text": "พร้อม",
+            "type": "tone_mark_error",
+            "rules_applied": [
+                "ย้าย-ไม้โท"
+            ]
+        },
+        {
+            "ocr_text": "บำรุง้",
+            "correct_text": "บำรุง",
+            "type": "tone_removal",
+            "rules_applied": [
+                "ลบ-วรรณยุกต์ท้ายคำ"
+            ]
+        },
+        {
+            "ocr_text": "พรอ้มบำรุง้",
+            "correct_text": "พร้อมบำรุง",
+            "type": "complex_error",
+            "rules_applied": [
+                "ย้าย-ไม้โท",
+                "ลบ-วรรณยุกต์ท้ายคำ"
+            ]
+        },
+        {
+            "ocr_text": "วยั",
+            "correct_text": "วัย",
+            "type": "vowel_consonant_swap",
+            "rules_applied": [
+                "ย-กับ-ัสลับ"
+            ]
+        },
+        {
+            "ocr_text": "ก่อนวยั",
+            "correct_text": "ก่อนวัย",
+            "type": "vowel_consonant_swap",
+            "rules_applied": [
+                "ย-กับ-ัสลับ"
+            ]
+        },
+        {
+            "ocr_text": "ตาํแหน่ง",
+            "correct_text": "ตำแหน่ง",
+            "type": "tone_mark_error",
+            "rules_applied": [
+                "ํ-กับ-ำสลับ",
+                "ย้าย-วรรณยุกต์-่"
+            ]
+        },
+        {
+            "ocr_text": "ผวิ",
+            "correct_text": "ผิว",
+            "type": "vowel_consonant_swap",
+            "rules_applied": [
+                "ว-กับ-ิสลับ"
+            ]
+        },
+        {
+            "ocr_text": "ไฮบรดิี",
+            "correct_text": "ไฮบริด",
+            "type": "complex_error",
+            "rules_applied": [
+                "ิ-ผิดตำแหน่ง",
+                "ลบ-สระซ้อน"
+            ]
+        },
+        {
+            "ocr_text": "ไฮบรดิ",
+            "correct_text": "ไฮบริด",
+            "type": "vowel_swap",
+            "rules_applied": [
+                "ิ-ผิดตำแหน่ง"
+            ]
+        },
+        {
+            "ocr_text": "ครมกนั",
+            "correct_text": "ครีมกัน",
+            "type": "complex_error",
+            "rules_applied": [
+                "เติม-ี",
+                "ั-สลับ-น"
+            ]
+        },
+        {
+            "ocr_text": "ครม",
+            "correct_text": "ครีม",
+            "type": "missing_vowel",
+            "rules_applied": [
+                "เติม-สระ-ี"
+            ]
+        },
+        {
+            "ocr_text": "ครมกนัแดดไฮบรดิี",
+            "correct_text": "ครีมกันแดดไฮบริด",
+            "type": "complex_error",
+            "rules_applied": [
+                "เติม-ี",
+                "ั-สลับ-น",
+                "ิ-ผิดตำแหน่ง"
+            ]
+        },
+        {
+            "ocr_text": "ผวิจาก",
+            "correct_text": "ผิวจาก",
+            "type": "vowel_consonant_swap",
+            "rules_applied": [
+                "ว-กับ-ิสลับ"
+            ]
+        },
+        {
+            "ocr_text": "ิว",
+            "correct_text": "วิ",
+            "type": "vowel_swap",
+            "rules_applied": [
+                "ิ-ผิดตำแหน่ง"
+            ]
+        },
+        {
+            "ocr_text": "จต",
+            "correct_text": "จิต",
+            "type": "complex_error",
+            "rules_applied": [
+                "ตัวอักษรขาด"
+            ]
+        }
+    ]
+}
