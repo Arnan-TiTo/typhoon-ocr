@@ -26,6 +26,9 @@ echo.
 echo 2. Activating Virtual Environment and Installing Dependencies...
 call venv\Scripts\activate
 
+echo [Removing legacy fitz package if present]
+pip uninstall -y fitz >nul 2>nul
+
 echo [Installing UI Requirements]
 pip install -r requirements.txt
 
@@ -39,11 +42,11 @@ echo.
 echo ========================================================
 echo Setup Completed!
 echo.
-echo NOTE for Windows Users: 
-echo You must install "poppler" manually for PDF processing.
-echo 1. Download poppler for Windows (e.g., from https://github.com/oschwartz10612/poppler-windows/releases)
-echo 2. Extract it to a folder (e.g., C:\poppler)
-echo 3. Add C:\poppler\bin to your System Environment Variables (PATH)
+echo NOTE for Windows Users:
+echo PDF rendering uses PyMuPDF. If startup fails with "No module named frontend",
+echo uninstall the legacy fitz package and reinstall PyMuPDF:
+echo   pip uninstall -y fitz
+echo   pip install --force-reinstall PyMuPDF
 echo ========================================================
 pause
 exit /b 0

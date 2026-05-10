@@ -5,6 +5,7 @@ openai
 python-dotenv
 ftfy
 pypdf
+# Provides the "fitz" import. Do not install the legacy package named "fitz".
 PyMuPDF
 pillow
 typhoon-ocr

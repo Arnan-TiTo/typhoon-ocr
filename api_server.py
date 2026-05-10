@@ -42,7 +42,7 @@ load_dotenv()
 # ---------------------------------------------------------------------------
 LMSTUDIO_BASE_URL = os.getenv("LMSTUDIO_BASE_URL", "http://localhost:1234/v1")
 LMSTUDIO_API_KEY = os.getenv("LMSTUDIO_API_KEY", "lm-studio")
-LMSTUDIO_MODEL = os.getenv("LMSTUDIO_MODEL", "typhoon-ocr-7b")
+LMSTUDIO_MODEL = os.getenv("LMSTUDIO_MODEL", "qwen/qwen2.5-vl-7b")
 
 # Allow fallback to remote Typhoon API if needed
 BASE_URL = os.getenv("TYPHOON_BASE_URL", LMSTUDIO_BASE_URL)

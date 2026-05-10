@@ -2,11 +2,49 @@ import base64
 from io import BytesIO
 import json
 import os
+import sys
 from openai import OpenAI
 from dotenv import load_dotenv
 from typhoon_ocr import prepare_ocr_messages
-import gradio as gr
 from PIL import Image
+
+try:
+    import gradio as gr
+except ModuleNotFoundError as exc:
+    if exc.name != "gradio":
+        raise
+
+    python_version = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
+    message_lines = [
+        "Missing dependency: gradio",
+        "",
+        f"Current Python: {python_version}",
+        f"Current executable: {sys.executable}",
+        "This usually means the current Python environment does not have Gradio installed.",
+        "",
+        "Recommended setup on Windows:",
+        "  1. Install dependencies into the same interpreter you use to run app.py",
+        "     If you run with `py app.py`, install with `py -m pip ...`",
+        "     If you run with `python app.py`, install with `python -m pip ...`",
+        "  2. If pip is blocked in this terminal, clear these env vars first:",
+        "     set PIP_NO_INDEX=",
+        "     set HTTP_PROXY=",
+        "     set HTTPS_PROXY=",
+        "     set ALL_PROXY=",
+        "     set GIT_HTTP_PROXY=",
+        "     set GIT_HTTPS_PROXY=",
+        "  3. Create a virtual environment and install dependencies:",
+        "     py -m venv venv",
+        "     venv\\Scripts\\activate",
+        "     python -m pip install -r requirements.txt",
+        "     python -m pip install -r requirements-api.txt",
+        "     python -m pip install -e .\\packages\\typhoon_ocr",
+        "  4. Run the app again:",
+        "     python app.py",
+        "",
+        "You can also run setup.bat after clearing the blocked pip env vars.",
+    ]
+    raise SystemExit("\n".join(message_lines))
 
 load_dotenv()
 
